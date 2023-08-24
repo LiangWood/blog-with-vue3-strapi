@@ -7,12 +7,13 @@
     </label>
     <div class="postContent">
       <textarea placeholder="寫點什麼..." class="postContentInput"></textarea>
-      <button class="pubBtn button">發布</button>
+      <TheButton>發布</TheButton>
     </div>
   </div>
   <TheModal />
 </template>
 <script setup>
+import TheButton from './TheButton.vue';
 import TheIcon from './TheIcon.vue';
 import TheModal from './TheModal.vue';
 </script>
