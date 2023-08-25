@@ -7,7 +7,7 @@
     </div>
     <div class="navItems">
       <router-link to="/"><TheIcon icon="home" /></router-link>
-      <button><TheIcon icon="publish" /></button>
+      <button @click="publishPost()"><TheIcon icon="publish" /></button>
       <!-- dropdown -->
       <div class="profileDropDown">
         <TheAvatar :width="42" :height="42" style="cursor: pointer" />
@@ -25,6 +25,12 @@
 <script setup>
 import TheAvatar from './TheAvatar.vue';
 import TheIcon from './TheIcon.vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const publishPost = () => {
+  store.commit('changeShowPostUpload', true);
+};
 </script>
 
 <style scoped>

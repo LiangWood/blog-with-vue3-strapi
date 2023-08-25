@@ -4,6 +4,7 @@ import ProfilePage from './pages/ProfilePage.vue';
 import ProfileEdittingPage from './pages/ProfileEdittingPage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { getJwtToken } from './apis/auth';
 
 const routes = [
   {
@@ -37,5 +38,15 @@ const router = createRouter({
   routes: routes,
   history: createWebHistory(),
 });
+
+// auto traslate to login or home page.
+// router.beforeEach((to) => {
+//   if (to.name !== 'login' && !getJwtToken()) {
+//     return { name: 'login' };
+//   }
+//   if (to.name === 'login' && getJwtToken()) {
+//     return { name: 'home' };
+//   }
+// });
 
 export { router };

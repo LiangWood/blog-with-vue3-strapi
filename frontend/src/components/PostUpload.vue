@@ -1,21 +1,40 @@
 <template>
-  <TheModal />
-  <div class="postUpload">
-    <label class="upload">
-      <TheIcon icon="upload-image" />
-      <input type="file" accept="image/*" class="fileChooser" />
-    </label>
-    <div class="postContent">
-      <textarea placeholder="寫點什麼..." class="postContentInput"></textarea>
-      <TheButton>發布</TheButton>
+  <TheModal @close="store.commit('changeShowPostUpload', false)">
+    <div class="postUpload">
+      <label class="upload">
+        <img v-if="imageObjUrl" :src="imageObjUrl" class="preview" />
+        <TheIcon v-else icon="upload-image" />
+        <input
+          type="file"
+          accept="image/*"
+          class="fileChooser"
+          @change="handleImageUpload"
+        />
+      </label>
+      <div class="postContent">
+        <textarea placeholder="寫點什麼..." class="postContentInput"></textarea>
+        <TheButton class="pubBtn">發布</TheButton>
+      </div>
     </div>
-  </div>
-  <TheModal />
+  </TheModal>
 </template>
 <script setup>
 import TheButton from './TheButton.vue';
 import TheIcon from './TheIcon.vue';
 import TheModal from './TheModal.vue';
+import { useStore } from 'vuex';
+import { ref } from 'vue';
+
+const store = useStore();
+const imageObjUrl = ref('');
+
+const handleImageUpload = async (e) => {
+  console.log(e);
+  const imageFile = e.target.files[0];
+  if (imageFile) {
+    imageObjUrl.value = URL.createObjectURL(imageFile);
+  }
+};
 </script>
 <style scoped>
 .postUpload {

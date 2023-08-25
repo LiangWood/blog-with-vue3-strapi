@@ -3,7 +3,9 @@
     <div class="modal">
       <div class="backdrop"></div>
       <div class="modalContent">
-        <button class="closebtn"><TheIcon icon="close" /></button>
+        <button class="closeBtn" @click="$emit('close')">
+          <TheIcon icon="close" />
+        </button>
         <slot></slot>
       </div>
     </div>
@@ -11,6 +13,8 @@
 </template>
 <script setup>
 import TheIcon from './TheIcon.vue';
+
+defineEmits(['close']);
 </script>
 <style scoped>
 .modal {
