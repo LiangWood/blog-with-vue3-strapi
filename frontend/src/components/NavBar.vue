@@ -2,7 +2,7 @@
   <nav class="navbar">
     <router-link to="/"><img src="../assets/logo.svg" /></router-link>
     <div class="searchInput">
-      <input type="text" />
+      <input type="text" @change="searchPosts" />
       <TheIcon icon="search" />
     </div>
     <div class="navItems">
@@ -10,11 +10,21 @@
       <button @click="publishPost()"><TheIcon icon="publish" /></button>
       <!-- dropdown -->
       <div class="profileDropDown">
-        <TheAvatar :width="42" :height="42" style="cursor: pointer" />
-        <div class="dropdownMenu">
+        <TheAvatar
+          :width="42"
+          :height="42"
+          :src="user?.avatar"
+          style="cursor: pointer"
+          @click="showDropdown = !showDropdown"
+        />
+        <div
+          class="dropdownMenu"
+          v-if="showDropdown"
+          @click="showDropdown = false"
+        >
           <ul class="profileMenu">
             <li><router-link to="/profile">個人主頁</router-link></li>
-            <li>退出登錄</li>
+            <li @click="logout">退出登錄</li>
           </ul>
         </div>
       </div>
@@ -26,10 +36,29 @@
 import TheAvatar from './TheAvatar.vue';
 import TheIcon from './TheIcon.vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const store = useStore();
+const router = useRouter();
+
+const showDropdown = ref(false);
+
 const publishPost = () => {
   store.commit('changeShowPostUpload', true);
+};
+const searchPosts = async (e) => {
+  await store.dispatch('searchPosts', e.target.value);
+  router.push({
+    name: 'search_result',
+    params: {
+      term: e.target.value,
+    },
+  });
+};
+const logout = async () => {
+  await store.dispatch('logoutUser');
+  router.push('./login');
 };
 </script>
 

@@ -2,28 +2,42 @@
   <div>
     <h2 class="tilte">編輯個人資料</h2>
     <div class="changeAvatar">
-      <TheAvatar :width="48" :height="48" />
+      <TheAvatar :width="48" :height="48" :src="profileData.avatar" />
       <TheButton>修改頭像</TheButton>
-      <input type="file" class="inputFile" />
+      <input type="file" class="inputFile" @change="uploadAvatar" />
     </div>
-    <form action="" class="profileForm">
+    <form action="" class="profileForm" @submit="updateUser">
       <label for="username">用戶名: </label>
-      <input type="text" />
+      <input type="text" v-model="profileData.username" />
       <label for="name">暱稱: </label>
-      <input type="text" />
+      <input type="text" v-model="profileData.name" />
       <label for="intro">簡介: </label>
-      <textarea rows="12"></textarea>
+      <textarea rows="12" v-model="profileData.intro"></textarea>
       <label for="mobilePhone">手機號: </label>
-      <input type="text" />
+      <input type="text" v-model="profileData.mobilePhone" />
       <label>性別: </label>
       <div class="gerderRadios">
-        <input type="radio" name="gender" id="M" value="M" />男
-        <input type="radio" name="gender" id="F" value="F" />女
+        <input
+          type="radio"
+          name="gender"
+          id="M"
+          value="M"
+          v-model="profileData.gender"
+        />男
+        <input
+          type="radio"
+          name="gender"
+          id="F"
+          value="F"
+          v-model="profileData.gender"
+        />女
       </div>
       <label for="website">網站: </label>
-      <input type="text" />
+      <input type="text" v-model="profileData.website" />
       <div class="actions">
-        <TheButton type="reset" reverse>取消</TheButton>
+        <TheButton type="reset" reverse @click.prevent="router.push('/profile')"
+          >取消</TheButton
+        >
         <TheButton type="submit">確認</TheButton>
       </div>
     </form>
@@ -32,6 +46,34 @@
 <script setup>
 import TheButton from '../components/TheButton.vue';
 import TheAvatar from '../components/TheAvatar.vue';
+import { uploadFile } from '../apis/file';
+import { useStore } from 'vuex';
+import { computed, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+const store = useStore();
+const router = useRouter();
+const user = computed(() => store.state.user.user);
+
+const profileData = reactive({
+  avatar: user.value.avatar,
+  username: user.value.username,
+  name: user.value.name,
+  intro: user.value.intro,
+  mobilePhone: user.value.mobilePhone,
+  gender: user.value.gender,
+  website: user.value.website,
+});
+
+const uploadAvatar = async (e) => {
+  const file = e.target.files[0];
+  const url = await uploadFile(file);
+  profileData.avatar = url;
+};
+const updateUser = async () => {
+  await store.dispatch('updateUser', profileData);
+  router.push('/profile');
+};
 </script>
 <style scoped>
 .title {

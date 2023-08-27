@@ -12,7 +12,7 @@
                 </pre
         >
         <div class="comments">
-          <div class="comment" v-for="comment in comments">
+          <div class="comment" v-for="comment in comments" :key="comment.id">
             <TheAvatar :src="comment.user?.avatar" />
             <span class="user">{{ comment.user?.name }}</span>
             <span class="commentDate">{{

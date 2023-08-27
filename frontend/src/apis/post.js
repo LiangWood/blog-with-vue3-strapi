@@ -1,5 +1,5 @@
 import { request } from '../utils/request';
-import { getJwtToken } from './auth';
+import { getUser, getJwtToken } from './auth';
 
 export const createPost = async (image, description) => {
   const formData = new FormData();
@@ -15,8 +15,10 @@ export const createPost = async (image, description) => {
   });
 };
 
-export const loadPosts = async () => {
-  const response = await request('/api/posts?populate=*');
+export const loadPosts = async (filters = '') => {
+  const response = await request(
+    '/api/posts?populate=*' + (filters && `&${filters}`)
+  );
   return response.data.map((post) => ({
     id: post?.id,
     ...post?.attributes,
@@ -25,6 +27,20 @@ export const loadPosts = async () => {
       id: post?.attributes?.user?.data?.id,
       ...post?.attributes?.user?.data?.attributes,
     },
+  }));
+};
+
+export const loadPostsByMe = async () => {
+  return loadPosts(`filters[user][id][$eq]=${getUser().id}`);
+};
+
+export const loadPostsLikedOrFavoredByMe = async (type = 'likes') => {
+  const response = await request(
+    `/api/users/me?populate[${type}][populate][0]=image`
+  );
+  return response[type].map((post) => ({
+    ...post,
+    image: post?.image?.[0].url,
   }));
 };
 

@@ -49,3 +49,8 @@ export const login = async (email, password) => {
 
   return result.user;
 };
+
+export const logout = () => {
+  localStorage.removeItem('jwtToken');
+  localStorage.removeItem('user');
+};
