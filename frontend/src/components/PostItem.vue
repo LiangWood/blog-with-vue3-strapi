@@ -1,15 +1,31 @@
 <template>
   <div class="postItem">
-    <img src="" alt="" width="100%" height="100%" style="background: #eee" />
+    <img
+      @click="this.$store.dispatch('showPostDetails', post.id)"
+      :src="post.image"
+      alt=""
+      width="100%"
+      height="100%"
+      style="background: #eee"
+    />
     <div class="postInfo">
       <div class="postMeta">
-        <TheAvatar />
-        <span>測試一</span>
-        <div class="postPubDate">12小時之前發布</div>
-        <PostActions />
+        <TheAvatar :src="post?.user?.avatar" />
+        <span>{{ post?.user?.name }}</span>
+        <div class="postPubDate">{{ dateToRelative(post.publishedAt) }}</div>
+        <PostActions
+          :likes="post.liked_bies"
+          :comments="post.comments"
+          :favors="post.favored_bies"
+          :likedByMe="post.likedByMe"
+          :favoredByMe="post.favoredByMe"
+          @likeClick="this.$store.dispatch('toggleLike', post.id)"
+          @favorClick="this.$store.dispatch('toggleFavor', post.id)"
+          @commentsClick="this.$store.dispatch('showPostDetails', post.id)"
+        />
       </div>
       <div class="postDesc">
-        <p>this is a test paragraph</p>
+        {{ post.description }}
       </div>
     </div>
   </div>
@@ -17,6 +33,14 @@
 <script setup>
 import TheAvatar from '../components/TheAvatar.vue';
 import PostActions from '../components/PostActions.vue';
+import { dateToRelative } from '../utils/date';
+
+defineProps({
+  post: {
+    type: Object,
+    default: {},
+  },
+});
 </script>
 <style scoped>
 .postItem {

@@ -1,12 +1,37 @@
 <template>
   <div class="postActions">
-    <TheIcon icon="like" fill="none" stroke="#000000" /><span>1.5W</span>
-    <TheIcon icon="comment" fill="none" stroke="#000000" /><span>1W</span>
-    <TheIcon icon="favorite" fill="none" stroke="#000000" /><span>99W</span>
+    <TheIcon
+      @click="emit('likeClick')"
+      icon="like"
+      :fill="likedByMe ? '#FF3C3C' : 'none'"
+      :stroke="likedByMe ? '#FF3C3C' : '#000000'"
+    /><span>{{ likes || '' }}</span>
+    <TheIcon
+      @click="emit('commentsClick')"
+      icon="comment"
+      fill="none"
+      stroke="#000000"
+    /><span>{{ comments || '' }}</span>
+    <TheIcon
+      @click="emit('favorClick')"
+      icon="favorite"
+      :fill="favoredByMe ? '#FFD12E' : 'none'"
+      :stroke="favoredByMe ? '#FFD12E' : '#000000'"
+    /><span>{{ favors || '' }}</span>
   </div>
 </template>
 <script setup>
 import TheIcon from './TheIcon.vue';
+
+defineProps({
+  likes: Number,
+  comments: Number,
+  favors: Number,
+  likedByMe: Boolean,
+  favoredByMe: Boolean,
+});
+
+const emit = defineEmits(['likeClick', 'favorClick', 'commentsClick']);
 </script>
 <style scoped>
 .postActions {

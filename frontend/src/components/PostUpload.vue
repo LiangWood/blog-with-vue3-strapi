@@ -12,8 +12,12 @@
         />
       </label>
       <div class="postContent">
-        <textarea placeholder="寫點什麼..." class="postContentInput"></textarea>
-        <TheButton class="pubBtn">發布</TheButton>
+        <textarea
+          placeholder="寫點什麼..."
+          class="postContentInput"
+          v-model="description"
+        ></textarea>
+        <TheButton class="pubBtn" @click="publishPost">發布</TheButton>
       </div>
     </div>
   </TheModal>
@@ -27,13 +31,22 @@ import { ref } from 'vue';
 
 const store = useStore();
 const imageObjUrl = ref('');
+const image = ref(null);
+const description = ref('');
 
 const handleImageUpload = async (e) => {
-  console.log(e);
   const imageFile = e.target.files[0];
   if (imageFile) {
     imageObjUrl.value = URL.createObjectURL(imageFile);
+    image.value = imageFile;
   }
+};
+
+const publishPost = () => {
+  store.dispatch('uploadPost', {
+    image: image.value,
+    description: description.value,
+  });
 };
 </script>
 <style scoped>

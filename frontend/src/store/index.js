@@ -13,11 +13,15 @@ export const store = createStore({
   state() {
     return {
       showPostUpload: false,
+      showPostDetails: false,
     };
   },
   mutations: {
     changeShowPostUpload(state, show) {
       state.showPostUpload = show;
+    },
+    changeShowPostDetails(state, show) {
+      state.showPostDetails = show;
     },
   },
   actions: {},
